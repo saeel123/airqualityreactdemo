@@ -276,7 +276,7 @@ header ul.navbar-nav li.dropdown .dropdown-menu a:hover {
   content: "";
   color: #000000;
   display: inline-block;
-  background-image: url(../public/images/icons/arow.png);
+  background-image: url(../images/icons/arow.png);
   width: 20px;
   height: 20px;
   -webkit-transform: rotate(-90deg);
@@ -337,7 +337,7 @@ header ul.navbar-nav li.dropdown .dropdown-menu a:hover {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background-image: url("../public/images/icons/arow.png");
+  background-image: url("../images/icons/arow.png");
   background-repeat: no-repeat;
   background-position: 94% 50%;
   background-size: 16px;
