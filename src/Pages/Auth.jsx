@@ -20,10 +20,23 @@ function Auth() {
   //layer controller
   const [showLayerController, setshowLayerController] = useState(false);
 
+  //aside controller
+  // const [showAsidebar, setShowAsidebar] = useState(false);
+
+  let showAsidebar = false;
+  const onAsideButton = () => {
+    showAsidebar = !showAsidebar;
+    if (showAsidebar === true) {
+      document.body.classList.add("sidebar-active");
+    } else {
+      document.body.classList.remove("sidebar-active");
+    }
+  };
+
   return (
-    <>
+    <div>
       {/* <!-- Sidebar --> */}
-      {/* <aside class="controls-sidebar">
+      <aside class="controls-sidebar">
         <button class="sidebar-close">&times;</button>
         <h3>Map controls</h3>
         <form class="recent-filter filter-form">
@@ -325,7 +338,7 @@ function Auth() {
             Display charts
           </button>
         </form>
-      </aside> */}
+      </aside>
       {/* <!-- Sidebar --> */}
 
       <div class="tab-content" id="pills-tabContent">
@@ -442,7 +455,7 @@ function Auth() {
             <div class="col-md-4 col-12">
               <div class="map-pointers">
                 <ul class="d-flex align-items-center">
-                  <li>
+                  <li onClick={() => onAsideButton()}>
                     <a
                       title="MENU"
                       data-toggle="tooltip"
@@ -620,7 +633,7 @@ function Auth() {
         </div>
       </section>
       {/* <!-- Map Footer --> */}
-    </>
+    </div>
   );
 }
 
