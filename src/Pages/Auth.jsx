@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import leaflet from "leaflet";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 
 function Auth() {
   useEffect(() => {
@@ -28,9 +30,69 @@ function Auth() {
     showAsidebar = !showAsidebar;
     if (showAsidebar === true) {
       document.body.classList.add("sidebar-active");
+      // document.body.classList.add("modal-open");
     } else {
       document.body.classList.remove("sidebar-active");
+      // document.body.classList.remove("");
     }
+  };
+
+  let showChartDailouge = false;
+  const onClickDisplayChartButton = () => {
+    showChartDailouge = !showChartDailouge;
+    if (showChartDailouge === true) {
+      document.body.classList.add("modal-open");
+      showChartOne();
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+  };
+
+  const showChartOne = () => {
+    Highcharts.chart("chartOne", {
+      title: {
+        text: "Islamabad (Last 24 hours)",
+      },
+
+      subtitle: {
+        text: "Source: Airflow",
+      },
+
+      yAxis: {
+        title: {
+          text: "PM<sub>2.5(kg/m<sup>3</sup>)</sub>",
+        },
+      },
+
+      xAxis: {
+        accessibility: {
+          rangeDescription: "Time(UTC)",
+        },
+      },
+
+      legend: {
+        enabled: false,
+      },
+
+      plotOptions: {
+        series: {
+          label: {
+            connectorAllowed: false,
+          },
+          pointStart: 2010,
+        },
+      },
+      credits: {
+        enabled: false,
+      },
+
+      series: [
+        {
+          name: "Installation & Developers",
+          data: [10, 20, 35, 22, 56, 48, 30, 44, 18, 27, 39],
+        },
+      ],
+    });
   };
 
   return (
@@ -108,11 +170,12 @@ function Auth() {
             </select>
           </div>
           <div class="spacer-margin"></div>
-          <button type="submit" class="btn btn-primary w-100 mb-4">
+          <button type="button" class="btn btn-primary w-100 mb-4">
             Compute
           </button>
           <button
-            type="submit"
+            onClick={() => onClickDisplayChartButton()}
+            type="button"
             class="btn btn-danger w-100"
             data-toggle="modal"
             data-target="#chartsModal"
@@ -376,8 +439,8 @@ function Auth() {
       </div>
 
       {/* <!-- CHARTS POPUP --> */}
-      {/* <div
-        class="modal fade chartsmodal modal-right"
+      <div
+        class="modal fade chartsmodal modal-right show"
         id="chartsModal"
         tabindex="-1"
         role="dialog"
@@ -413,7 +476,7 @@ function Auth() {
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
       {/* <!-- CHARTS POPUP --> */}
 
       {/* <!-- Surface pm visibility popup --> */}
