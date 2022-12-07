@@ -1,10 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
+import leaflet from "leaflet";
 
 function Auth() {
+  useEffect(() => {
+    map();
+  }, []);
+
+  const map = () => {
+    let mymap = leaflet.map("map").setView([15.87, 100.9925], 5);
+
+    leaflet
+      .tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      })
+      .addTo(mymap);
+  };
+
   return (
     <>
       {/* <!-- Sidebar --> */}
-      <aside class="controls-sidebar">
+      {/* <aside class="controls-sidebar">
         <button class="sidebar-close">&times;</button>
         <h3>Map controls</h3>
         <form class="recent-filter filter-form">
@@ -306,7 +322,7 @@ function Auth() {
             Display charts
           </button>
         </form>
-      </aside>
+      </aside> */}
       {/* <!-- Sidebar --> */}
 
       <div class="tab-content" id="pills-tabContent">
@@ -336,44 +352,15 @@ function Auth() {
                 <img src="./images/icons/search.png" alt="" />
               </button>
             </div>
-            <div id="map"></div>
+            {/* <div id="map"></div> */}
+            <div id="map" style={{ height: "100vh" }}></div>
           </div>
-          {/* <!-- Map --> */}
-        </div>
-        <div
-          class="tab-pane fade"
-          id="pills-archive"
-          role="tabpanel"
-          aria-labelledby="pills-archive-tab"
-        >
-          {/* <!-- Map --> */}
-          <div id="mapone"></div>
-          {/* <!-- Map --> */}
-        </div>
-        <div
-          class="tab-pane fade"
-          id="pills-forecast"
-          role="tabpanel"
-          aria-labelledby="pills-forecast-tab"
-        >
-          {/* <!-- Map --> */}
-          <div id="maptwo"></div>
-          {/* <!-- Map --> */}
-        </div>
-        <div
-          class="tab-pane fade"
-          id="pills-emission"
-          role="tabpanel"
-          aria-labelledby="pills-emission-tab"
-        >
-          {/* <!-- Map --> */}
-          <div id="mapthree"></div>
           {/* <!-- Map --> */}
         </div>
       </div>
 
       {/* <!-- CHARTS POPUP --> */}
-      <div
+      {/* <div
         class="modal fade chartsmodal modal-right"
         id="chartsModal"
         tabindex="-1"
@@ -410,11 +397,11 @@ function Auth() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* <!-- CHARTS POPUP --> */}
 
       {/* <!-- Surface pm visibility popup --> */}
-      <div class="surface-popup">
+      {/* <div class="surface-popup">
         <div class="surface-popup-header">
           Surface PM 2.5 (PGM<sup>-3</sup>)
         </div>
@@ -442,7 +429,7 @@ function Auth() {
             </li>
           </ul>
         </div>
-      </div>
+      </div> */}
       {/* <!-- Surface pm visibility popup --> */}
 
       {/* <!-- Map Footer --> */}
@@ -577,14 +564,14 @@ function Auth() {
                   <div class="row no-gutters">
                     <div class="col-6">
                       <label class="check-label">PM 2.5(GEOS-ML)</label>
-                      <label for="check1" class="custom-check">
+                      <label htmlFor="check1" class="custom-check">
                         <input type="checkbox" name="" id="check1" />
                         <span></span>
                       </label>
                     </div>
                     <div class="col-6">
                       <label class="check-label">PM 2.5 (PCD)</label>
-                      <label for="check2" class="custom-check">
+                      <label htmlFor="check2" class="custom-check">
                         <input type="checkbox" name="" id="check2" />
                         <span></span>
                       </label>
@@ -594,21 +581,21 @@ function Auth() {
                   <div class="row no-gutters">
                     <div class="col-4">
                       <label class="check-label">Light</label>
-                      <label for="check3" class="custom-check">
+                      <label htmlFor="check3" class="custom-check">
                         <input type="checkbox" name="" id="check3" />
                         <span></span>
                       </label>
                     </div>
                     <div class="col-4">
                       <label class="check-label">Dark</label>
-                      <label for="check4" class="custom-check">
+                      <label htmlFor="check4" class="custom-check">
                         <input type="checkbox" name="" id="check4" />
                         <span></span>
                       </label>
                     </div>
                     <div class="col-4">
                       <label class="check-label">Satellite</label>
-                      <label for="check5" class="custom-check">
+                      <label htmlFor="check5" class="custom-check">
                         <input type="checkbox" name="" id="check5" />
                         <span></span>
                       </label>
