@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import leaflet from "leaflet";
 
 function Auth() {
@@ -16,6 +16,9 @@ function Auth() {
       })
       .addTo(mymap);
   };
+
+  //layer controller
+  const [showLayerController, setshowLayerController] = useState(false);
 
   return (
     <>
@@ -528,7 +531,9 @@ function Auth() {
             <div class="col-md-4 col-12 blue-bg-extend">
               <div class="map-actions">
                 <ul class="d-flex">
-                  <li>
+                  <li
+                    onClick={() => setshowLayerController(!showLayerController)}
+                  >
                     <a href="#" class="active toggle-layer-popup">
                       <img src="./images/icons/layers.png" alt="" />
                       <label class="btn-label">Layers</label>
@@ -559,49 +564,56 @@ function Auth() {
                     </a>
                   </li>
                 </ul>
-                <div class="layer-popup">
-                  <label class="block-title">Toggle layer visibility</label>
-                  <div class="row no-gutters">
-                    <div class="col-6">
-                      <label class="check-label">PM 2.5(GEOS-ML)</label>
-                      <label htmlFor="check1" class="custom-check">
-                        <input type="checkbox" name="" id="check1" />
-                        <span></span>
-                      </label>
+
+                {showLayerController === true ? (
+                  <>
+                    <div class="layer-popup">
+                      <label class="block-title">Toggle layer visibility</label>
+                      <div class="row no-gutters">
+                        <div class="col-6">
+                          <label class="check-label">PM 2.5(GEOS-ML)</label>
+                          <label htmlFor="check1" class="custom-check">
+                            <input type="checkbox" name="" id="check1" />
+                            <span></span>
+                          </label>
+                        </div>
+                        <div class="col-6">
+                          <label class="check-label">PM 2.5 (PCD)</label>
+                          <label htmlFor="check2" class="custom-check">
+                            <input type="checkbox" name="" id="check2" />
+                            <span></span>
+                          </label>
+                        </div>
+                      </div>
+                      <label class="block-title">Base map</label>
+                      <div class="row no-gutters">
+                        <div class="col-4">
+                          <label class="check-label">Light</label>
+                          <label htmlFor="check3" class="custom-check">
+                            <input type="checkbox" name="" id="check3" />
+                            <span></span>
+                          </label>
+                        </div>
+                        <div class="col-4">
+                          <label class="check-label">Dark</label>
+                          <label htmlFor="check4" class="custom-check">
+                            <input type="checkbox" name="" id="check4" />
+                            <span></span>
+                          </label>
+                        </div>
+                        <div class="col-4">
+                          <label class="check-label">Satellite</label>
+                          <label htmlFor="check5" class="custom-check">
+                            <input type="checkbox" name="" id="check5" />
+                            <span></span>
+                          </label>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-6">
-                      <label class="check-label">PM 2.5 (PCD)</label>
-                      <label htmlFor="check2" class="custom-check">
-                        <input type="checkbox" name="" id="check2" />
-                        <span></span>
-                      </label>
-                    </div>
-                  </div>
-                  <label class="block-title">Base map</label>
-                  <div class="row no-gutters">
-                    <div class="col-4">
-                      <label class="check-label">Light</label>
-                      <label htmlFor="check3" class="custom-check">
-                        <input type="checkbox" name="" id="check3" />
-                        <span></span>
-                      </label>
-                    </div>
-                    <div class="col-4">
-                      <label class="check-label">Dark</label>
-                      <label htmlFor="check4" class="custom-check">
-                        <input type="checkbox" name="" id="check4" />
-                        <span></span>
-                      </label>
-                    </div>
-                    <div class="col-4">
-                      <label class="check-label">Satellite</label>
-                      <label htmlFor="check5" class="custom-check">
-                        <input type="checkbox" name="" id="check5" />
-                        <span></span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
+                  </>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
           </div>

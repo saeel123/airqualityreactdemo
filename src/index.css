@@ -193,7 +193,7 @@ header ul.navbar-nav li.dropdown .dropdown-menu a:hover {
   left: 15px;
   padding: 15px 23px;
   width: 100%;
-  display: none;
+  display: block;
 }
 .layer-popup:before {
   content: "";
