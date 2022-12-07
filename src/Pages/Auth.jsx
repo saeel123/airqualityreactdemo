@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import leaflet from "leaflet";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+let mymap;
 
 function Auth() {
+  console.log("reloaded");
   useEffect(() => {
+    console.log("render");
     map();
   }, []);
 
   const map = () => {
-    let mymap = leaflet.map("map").setView([15.87, 100.9925], 5);
+    mymap = leaflet.map("map").setView([15.87, 100.9925], 5);
 
     leaflet
       .tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -17,6 +20,8 @@ function Auth() {
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       })
       .addTo(mymap);
+
+    rendertdWmsAODLayer();
   };
 
   //layer controller
@@ -95,6 +100,110 @@ function Auth() {
     });
   };
 
+  //render WMS layer
+  var wurl = "http://smog.spatialapps.net:8080/geoserver/AirQuality/wms";
+
+  const bbboxretuen = () => {
+    let t = mymap.getBounds().toBBoxString();
+    return t;
+  };
+
+  var tdWmsAODLayer;
+  const rendertdWmsAODLayer = () => {
+    console.log(bbboxretuen);
+
+    tdWmsAODLayer = leaflet.tileLayer.wms(wurl, {
+      layers: "AirQuality:aeronet_aod",
+      format: "image/png",
+      transparent: true,
+      styles: "",
+      colorscalerange: "0,100",
+      opacity: 1,
+      version: "1.3.0",
+      zIndex: 100,
+      request: "GetMap",
+      // bounds: [
+      //   [0, 90],
+      //   [22, 120],
+      // ],
+      BBOX: bbboxretuen,
+      abovemaxcolor: "extend",
+      belowmincolor: "extend",
+    });
+    tdWmsAODLayer.addTo(mymap);
+  };
+
+  const removetdWmsAODLayer = () => {
+    console.log(mymap);
+    console.log("REMOVE PM@");
+    let hasLayerd = mymap.hasLayer(tdWmsAODLayer);
+
+    console.log(hasLayerd);
+    if (hasLayerd === true) {
+      mymap.removeLayer(tdWmsAODLayer);
+      tdWmsAODLayer = null;
+    }
+  };
+
+  var tdWmsAODLayerpm2p5;
+  const rendertdWmsAODLayerpm2p5Layer = () => {
+    tdWmsAODLayerpm2p5 = leaflet.tileLayer.wms(wurl, {
+      layers: "AirQuality:us_embassy_pm2p5",
+      format: "image/png",
+      transparent: true,
+      styles: "",
+      colorscalerange: "0,100",
+      opacity: 1,
+      version: "1.3.0",
+      zIndex: 100,
+      request: "GetMap",
+      // bounds: [
+      //   [0, 90],
+      //   [22, 120],
+      // ],
+      BBOX: bbboxretuen,
+      abovemaxcolor: "extend",
+      belowmincolor: "extend",
+    });
+    tdWmsAODLayerpm2p5.addTo(mymap);
+  };
+
+  const removettdWmsAODLayerpm2p5Layer = () => {
+    mymap.removeLayer(tdWmsAODLayerpm2p5);
+    tdWmsAODLayerpm2p5 = null;
+  };
+
+  const [selectedPollutants, setSelectedPollutants] = useState("aod");
+
+  const onPollutantsSelect = (e) => {
+    let pollutant = e.target.value;
+    setSelectedPollutants(e.target.value);
+
+    console.log(pollutant);
+
+    if (pollutant == "pm2") {
+      removetdWmsAODLayer();
+      rendertdWmsAODLayerpm2p5Layer();
+    }
+    if (pollutant == "aod") {
+      removettdWmsAODLayerpm2p5Layer();
+      rendertdWmsAODLayer();
+      // rendertdWmsAODLayer();
+    }
+  };
+
+  // useEffect(() => {
+  //   console.log(selectedPollutants);
+
+  //   if (selectedPollutants == "pm2") {
+  //     rendertdWmsAODLayerpm2p5Layer();
+  //     removetdWmsAODLayer();
+  //   } else {
+  //     rendertdWmsAODLayer();
+  //     removettdWmsAODLayerpm2p5Layer();
+  //   }
+  // }, [selectedPollutants]);
+
   return (
     <div>
       {/* <!-- Sidebar --> */}
@@ -112,11 +221,14 @@ function Auth() {
           <div class="spacer-margin"></div>
           <div class="form-group">
             <label class="group-labels">Pollutants</label>
-            <input
-              type="text"
-              id="cascade-menu"
-              class="cascade-menu form-control"
-            />
+            <select
+              value={selectedPollutants}
+              onChange={onPollutantsSelect}
+              class="form-control"
+            >
+              <option value="aod">Surface Observation-AOD (AERONET)</option>
+              <option value="pm2">Ground Observation-PM2.5 (AirNow)</option>
+            </select>
           </div>
           <div class="spacer-margin"></div>
           <div class="form-group">
@@ -615,7 +727,7 @@ function Auth() {
                       <label class="btn-label">Layers</label>
                     </a>
                   </li>
-                  <li>
+                  <li onClick={() => removetdWmsAODLayer()}>
                     <a href="#">
                       <img src="./images/icons/download.png" alt="" />
                       <label class="btn-label">Download</label>
