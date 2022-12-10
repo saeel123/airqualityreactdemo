@@ -51,3 +51,27 @@ export const getObservationStationList = (startDate, endDate) => {
     }
   });
 };
+
+// let getStationChartDataUrl = "http://smog.icimod.org/apps/airquality/getData/";
+let getStationChartDataUrl = "/data/dataListChart.json";
+
+export const getStationChartData = (startDate, endDate) => {
+  return new Promise((resolve, reject) => {
+    try {
+      axios
+        .get(getStationChartDataUrl)
+        .then((res) => {
+          resolve(res.data);
+        })
+        .catch((err) => {
+          reject("Error in getAccountDetials Axios!");
+        });
+    } catch (error) {
+      console.error(
+        "in billingPlanServices > getAccountDetails, Err===",
+        error
+      );
+      reject("SYSTEM_ERROR");
+    }
+  });
+};

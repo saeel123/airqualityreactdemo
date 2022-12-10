@@ -5,6 +5,7 @@ import HighchartsReact from "highcharts-react-official";
 import {
   getDefaultObservationStation,
   getObservationStationList,
+  getStationChartData,
 } from "../Services/dataFetchServices";
 require("highcharts/modules/exporting")(Highcharts);
 
@@ -155,6 +156,7 @@ function Auth() {
     if (showChartDailouge === true) {
       document.body.classList.add("modal-open");
       showChartOne();
+      showChartTwo();
     } else {
       document.body.classList.remove("modal-open");
     }
@@ -183,12 +185,7 @@ function Auth() {
       // Define the data to be represented
       series: [
         {
-          data: [
-            40.0, 47.0, 65.0, 76.0, 85.0, 53.0, 39.0, 36.0, 18.0, 25.0, 147.0,
-            27.0, 28.0, 34.0, 42.0, 59.0, 71.0, 50.0, 65.0, 60.0, 49.0, 49.0,
-            48.0, 41.0, 43.0, 59.0, 69.0, 79.0, 84.0, 84.0, 46.0, 44.0, 26.0,
-            16.0, 17.0, 24.0, 29.0,
-          ],
+          data: chartOneData,
           name: "PM2.5",
           pointStart: Date.UTC(2022, 11, 9, 0, 15),
           pointInterval: 3600 * 1000, // one hour
@@ -198,6 +195,86 @@ function Auth() {
     });
   };
 
+  const showChartTwo = () => {
+    Highcharts.chart("chartTwo", {
+      title: {
+        text: "Islamabad (Last 24 hours)",
+      },
+      subtitle: {
+        text: "Source: Airflow",
+      },
+      xAxis: {
+        title: {
+          text: "Time(UTC)",
+        },
+        type: "datetime",
+      },
+      yAxis: {
+        title: {
+          text: "PM<sub>2.5(kg/m<sup>3</sup>)</sub>",
+        },
+      },
+
+      // Define the data to be represented
+      series: [
+        {
+          data: chartOneData,
+          name: "PM2.5",
+          pointStart: Date.UTC(2022, 11, 9, 0, 15),
+          pointInterval: 3600 * 1000, // one hour
+          relativeXValue: true,
+        },
+      ],
+    });
+  };
+
+  const computeChartData = () => {
+    getChartOneData();
+    getChartTwoData();
+  };
+
+  const [chartOneData, setchartOneData] = useState([]);
+  const getChartOneData = () => {
+    let chartOneDataTemp = [];
+    getStationChartData()
+      .then((res) => {
+        console.log(res);
+        let SeriesData = res.SeriesData;
+
+        SeriesData.forEach((element) => {
+          chartOneDataTemp.push(element[1]);
+        });
+        console.log(chartOneDataTemp);
+        setchartOneData(chartOneDataTemp);
+      })
+      .catch((err) => {
+        console.log("axios err=", err);
+      });
+
+    return () => {};
+  };
+
+  const [chartTwoData, setchartTwoData] = useState([]);
+  const getChartTwoData = () => {
+    let chartTwoDataTemp = [];
+    getStationChartData()
+      .then((res) => {
+        console.log(res);
+        let SeriesData = res.SeriesData;
+
+        SeriesData.forEach((element) => {
+          chartTwoDataTemp.push(element[1]);
+        });
+        setchartTwoData(chartTwoDataTemp);
+      })
+      .catch((err) => {
+        console.log("axios err=", err);
+      });
+
+    return () => {};
+  };
+
+  //Side Drawer logic start
   const [stationOne, setstationOne] = useState("");
   const [stationTwo, setstationTwo] = useState("");
   const [stationThree, setstationThree] = useState("");
@@ -311,7 +388,11 @@ function Auth() {
             </select>
           </div>
           <div class="spacer-margin"></div>
-          <button type="button" class="btn btn-primary w-100 mb-4">
+          <button
+            onClick={() => computeChartData()}
+            type="button"
+            class="btn btn-primary w-100 mb-4"
+          >
             Compute
           </button>
           <button
