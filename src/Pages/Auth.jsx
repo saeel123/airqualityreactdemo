@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import leaflet from "leaflet";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+require("highcharts/modules/exporting")(Highcharts);
 let mymap;
 let tdWmsPm2Layer;
 let tdWmsAODLayer;
