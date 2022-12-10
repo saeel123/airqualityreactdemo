@@ -28,8 +28,6 @@ function Auth() {
   const [showLayerController, setshowLayerController] = useState(false);
 
   //aside controller
-  // const [showAsidebar, setShowAsidebar] = useState(false);
-
   let showAsidebar = false;
   const onAsideButton = () => {
     showAsidebar = !showAsidebar;
@@ -42,6 +40,7 @@ function Auth() {
     }
   };
 
+  //Chart Logic
   let showChartDailouge = false;
   const onClickDisplayChartButton = () => {
     showChartDailouge = !showChartDailouge;
@@ -58,43 +57,34 @@ function Auth() {
       title: {
         text: "Islamabad (Last 24 hours)",
       },
-
       subtitle: {
         text: "Source: Airflow",
       },
-
+      xAxis: {
+        title: {
+          text: "Time(UTC)",
+        },
+        type: "datetime",
+      },
       yAxis: {
         title: {
           text: "PM<sub>2.5(kg/m<sup>3</sup>)</sub>",
         },
       },
 
-      xAxis: {
-        accessibility: {
-          rangeDescription: "Time(UTC)",
-        },
-      },
-
-      legend: {
-        enabled: false,
-      },
-
-      plotOptions: {
-        series: {
-          label: {
-            connectorAllowed: false,
-          },
-          pointStart: 2010,
-        },
-      },
-      credits: {
-        enabled: false,
-      },
-
+      // Define the data to be represented
       series: [
         {
-          name: "Installation & Developers",
-          data: [10, 20, 35, 22, 56, 48, 30, 44, 18, 27, 39],
+          data: [
+            40.0, 47.0, 65.0, 76.0, 85.0, 53.0, 39.0, 36.0, 18.0, 25.0, 147.0,
+            27.0, 28.0, 34.0, 42.0, 59.0, 71.0, 50.0, 65.0, 60.0, 49.0, 49.0,
+            48.0, 41.0, 43.0, 59.0, 69.0, 79.0, 84.0, 84.0, 46.0, 44.0, 26.0,
+            16.0, 17.0, 24.0, 29.0,
+          ],
+          name: "PM2.5",
+          pointStart: Date.UTC(2022, 11, 9, 0, 15),
+          pointInterval: 3600 * 1000, // one hour
+          relativeXValue: true,
         },
       ],
     });
