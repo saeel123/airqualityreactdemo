@@ -3,11 +3,11 @@ import leaflet from "leaflet";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 let mymap;
+let tdWmsPm2Layer;
+let tdWmsAODLayer;
 
 function Auth() {
-  console.log("reloaded");
   useEffect(() => {
-    console.log("render");
     map();
   }, []);
 
@@ -27,16 +27,118 @@ function Auth() {
   //layer controller
   const [showLayerController, setshowLayerController] = useState(false);
 
+  //render WMS layer
+  var wurl = "http://smog.spatialapps.net:8080/geoserver/AirQuality/wms";
+
+  const bbboxretuen = () => {
+    let t = mymap.getBounds().toBBoxString();
+    return t;
+  };
+
+  const rendertdWmsAODLayer = () => {
+    tdWmsAODLayer = leaflet.tileLayer.wms(wurl, {
+      layers: "AirQuality:aeronet_aod",
+      format: "image/png",
+      transparent: true,
+      styles: "",
+      colorscalerange: "0,100",
+      opacity: 1,
+      version: "1.3.0",
+      zIndex: 100,
+      request: "GetMap",
+      // bounds: [
+      //   [0, 90],
+      //   [22, 120],
+      // ],
+      BBOX: bbboxretuen,
+      abovemaxcolor: "extend",
+      belowmincolor: "extend",
+    });
+    tdWmsAODLayer.addTo(mymap);
+  };
+
+  const removetdWmsAODLayer = () => {
+    let hasLayerd = mymap.hasLayer(tdWmsAODLayer);
+
+    console.log(hasLayerd);
+    if (hasLayerd === true) {
+      mymap.removeLayer(tdWmsAODLayer);
+      tdWmsAODLayer = null;
+    }
+  };
+
+  const renderWmsPm2Layer = () => {
+    tdWmsPm2Layer = leaflet.tileLayer.wms(wurl, {
+      layers: "AirQuality:us_embassy_pm2p5",
+      format: "image/png",
+      transparent: true,
+      styles: "",
+      colorscalerange: "0,100",
+      opacity: 1,
+      version: "1.3.0",
+      zIndex: 100,
+      request: "GetMap",
+      BBOX: bbboxretuen,
+      abovemaxcolor: "extend",
+      belowmincolor: "extend",
+    });
+    tdWmsPm2Layer.addTo(mymap);
+  };
+
+  const removeWmsPm2Layer = () => {
+    // mymap.removeLayer(tdWmsPm2Layer);
+    // tdWmsPm2Layer = null;
+    console.log(tdWmsPm2Layer);
+
+    let hasLayerd = mymap.hasLayer(tdWmsPm2Layer);
+
+    console.log(hasLayerd);
+    if (hasLayerd === true) {
+      mymap.removeLayer(tdWmsPm2Layer);
+      tdWmsPm2Layer = null;
+    }
+  };
+
+  const [selectedPollutants, setSelectedPollutants] = useState("aod");
+
+  const onPollutantsSelect = (e) => {
+    let pollutant = e.target.value;
+    setSelectedPollutants(e.target.value);
+
+    console.log(pollutant);
+
+    if (pollutant == "pm2") {
+      console.log("Check PM2");
+      removetdWmsAODLayer();
+      renderWmsPm2Layer();
+    }
+    if (pollutant == "aod") {
+      rendertdWmsAODLayer();
+
+      removeWmsPm2Layer();
+    }
+  };
+
+  // useEffect(() => {
+  //   console.log(selectedPollutants);
+
+  //   if (selectedPollutants == "pm2") {
+  //     rendertdWmsAODLayerpm2p5Layer();
+  //     removetdWmsAODLayer();
+  //   } else {
+  //     rendertdWmsAODLayer();
+  //     removettdWmsAODLayerpm2p5Layer();
+  //   }
+  // }, [selectedPollutants]);
+
   //aside controller
   let showAsidebar = false;
   const onAsideButton = () => {
     showAsidebar = !showAsidebar;
     if (showAsidebar === true) {
       document.body.classList.add("sidebar-active");
-      // document.body.classList.add("modal-open");
     } else {
       document.body.classList.remove("sidebar-active");
-      // document.body.classList.remove("");
     }
   };
 
@@ -90,110 +192,6 @@ function Auth() {
     });
   };
 
-  //render WMS layer
-  var wurl = "http://smog.spatialapps.net:8080/geoserver/AirQuality/wms";
-
-  const bbboxretuen = () => {
-    let t = mymap.getBounds().toBBoxString();
-    return t;
-  };
-
-  var tdWmsAODLayer;
-  const rendertdWmsAODLayer = () => {
-    console.log(bbboxretuen);
-
-    tdWmsAODLayer = leaflet.tileLayer.wms(wurl, {
-      layers: "AirQuality:aeronet_aod",
-      format: "image/png",
-      transparent: true,
-      styles: "",
-      colorscalerange: "0,100",
-      opacity: 1,
-      version: "1.3.0",
-      zIndex: 100,
-      request: "GetMap",
-      // bounds: [
-      //   [0, 90],
-      //   [22, 120],
-      // ],
-      BBOX: bbboxretuen,
-      abovemaxcolor: "extend",
-      belowmincolor: "extend",
-    });
-    tdWmsAODLayer.addTo(mymap);
-  };
-
-  const removetdWmsAODLayer = () => {
-    console.log(mymap);
-    console.log("REMOVE PM@");
-    let hasLayerd = mymap.hasLayer(tdWmsAODLayer);
-
-    console.log(hasLayerd);
-    if (hasLayerd === true) {
-      mymap.removeLayer(tdWmsAODLayer);
-      tdWmsAODLayer = null;
-    }
-  };
-
-  var tdWmsAODLayerpm2p5;
-  const rendertdWmsAODLayerpm2p5Layer = () => {
-    tdWmsAODLayerpm2p5 = leaflet.tileLayer.wms(wurl, {
-      layers: "AirQuality:us_embassy_pm2p5",
-      format: "image/png",
-      transparent: true,
-      styles: "",
-      colorscalerange: "0,100",
-      opacity: 1,
-      version: "1.3.0",
-      zIndex: 100,
-      request: "GetMap",
-      // bounds: [
-      //   [0, 90],
-      //   [22, 120],
-      // ],
-      BBOX: bbboxretuen,
-      abovemaxcolor: "extend",
-      belowmincolor: "extend",
-    });
-    tdWmsAODLayerpm2p5.addTo(mymap);
-  };
-
-  const removettdWmsAODLayerpm2p5Layer = () => {
-    mymap.removeLayer(tdWmsAODLayerpm2p5);
-    tdWmsAODLayerpm2p5 = null;
-  };
-
-  const [selectedPollutants, setSelectedPollutants] = useState("aod");
-
-  const onPollutantsSelect = (e) => {
-    let pollutant = e.target.value;
-    setSelectedPollutants(e.target.value);
-
-    console.log(pollutant);
-
-    if (pollutant == "pm2") {
-      removetdWmsAODLayer();
-      rendertdWmsAODLayerpm2p5Layer();
-    }
-    if (pollutant == "aod") {
-      removettdWmsAODLayerpm2p5Layer();
-      rendertdWmsAODLayer();
-      // rendertdWmsAODLayer();
-    }
-  };
-
-  // useEffect(() => {
-  //   console.log(selectedPollutants);
-
-  //   if (selectedPollutants == "pm2") {
-  //     rendertdWmsAODLayerpm2p5Layer();
-  //     removetdWmsAODLayer();
-  //   } else {
-  //     rendertdWmsAODLayer();
-  //     removettdWmsAODLayerpm2p5Layer();
-  //   }
-  // }, [selectedPollutants]);
-
   return (
     <div>
       {/* <!-- Sidebar --> */}
@@ -204,8 +202,8 @@ function Auth() {
           <div class="form-group">
             <label class="group-labels">Select Parameter</label>
             <select class="form-control mb-0">
-              <option>Location</option>
               <option>Parameter</option>
+              {/* <option>Location</option> */}
             </select>
           </div>
           <div class="spacer-margin"></div>
