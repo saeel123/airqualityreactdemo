@@ -1,0 +1,50 @@
+{
+  "status": 200,
+  "data": [
+    {
+      "value": 8,
+      "label": "Dhaka",
+      "folder_name": "Dhaka"
+    },
+    {
+      "value": 6,
+      "label": "Embassy Kathmandu",
+      "folder_name": "Embassy Kathmandu"
+    },
+    {
+      "value": 2,
+      "label": "Islamabad",
+      "folder_name": "Islamabad"
+    },
+    {
+      "value": 1,
+      "label": "Kabul",
+      "folder_name": "Kabul"
+    },
+    {
+      "value": 5,
+      "label": "Kolkata",
+      "folder_name": "Kolkata"
+    },
+    {
+      "value": 3,
+      "label": "Lahore",
+      "folder_name": "Lahore"
+    },
+    {
+      "value": 4,
+      "label": "New Delhi",
+      "folder_name": "New Delhi"
+    },
+    {
+      "value": 7,
+      "label": "Phora Durbar Kathmandu",
+      "folder_name": "Phora Durbar Kathmandu"
+    },
+    {
+      "value": 9,
+      "label": "Rangoon",
+      "folder_name": "Rangoon"
+    }
+  ]
+}
